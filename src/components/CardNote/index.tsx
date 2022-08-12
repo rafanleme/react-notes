@@ -1,16 +1,34 @@
-import { Note } from "../../services/notes/types";
+import { HTMLAttributeAnchorTarget, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { formatDate } from "../../services/utils";
+import { ApplicationState } from "../../store";
+import { deleteNoteRequest } from "../../store/ducks/notes/notes.actions";
+import { Note } from "../../store/ducks/notes/notes.types";
 import { Container } from "./styles";
 
 interface NoteProps {
   note: Note;
-  handleDelete: (id: number) => void;
 }
 
-function CardNote({ note, handleDelete }: NoteProps) {
+function CardNote({ note }: NoteProps) {
+  const dispatch = useDispatch();
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { isLoadingDeleteNote, deleteNoteId } = useSelector(
+    (state: ApplicationState) => state.noteState
+  );
+
+  const handleDelete = (noteId: number) => {
+    dispatch(deleteNoteRequest(noteId));
+  };
+
+  if (deleteNoteId === note.id && containerRef?.current)
+    containerRef.current.style.opacity = "0.5";
+
   return (
     <>
-      <Container>
+      <Container ref={containerRef}>
         <p>{formatDate(new Date(note?.date))}</p>
         <p>{note.text}</p>
         {note.urgent && (
@@ -18,10 +36,16 @@ function CardNote({ note, handleDelete }: NoteProps) {
             priority_high
           </span>
         )}
-        <span className="material-icons" onClick={() => handleDelete(note.id)}>
-          {" "}
-          delete_forever{" "}
-        </span>
+        {isLoadingDeleteNote && deleteNoteId === note.id ? (
+          <span className="material-icons spin">cached</span>
+        ) : (
+          <span
+            className="material-icons"
+            onClick={() => handleDelete(note.id)}
+          >
+            delete_forever
+          </span>
+        )}
       </Container>
     </>
   );

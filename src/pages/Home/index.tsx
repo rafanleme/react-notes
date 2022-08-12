@@ -1,50 +1,40 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import CardNote from "../../components/CardNote";
 import FabButton from "../../components/FabButton";
-import FormNote, { FormValueState } from "./FormNote";
+import FormNote from "./FormNote";
 import Modal from "../../components/Modal";
-import { NotesService } from "../../services/notes/note-service";
-import { Note } from "../../services/notes/types";
 import { Container } from "./styles";
 import { Context } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { FormikHelpers } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { ApplicationState } from "../../store/index";
+import { getNotesRequest } from "../../store/ducks/notes/notes.actions";
+import { PostNoteRequest } from "../../store/ducks/notes/notes.types";
 
 function Home() {
+  const dispatch = useDispatch();
+  const { notes, isLoadingGetNotes, isSuccessPostNote } = useSelector(
+    (state: ApplicationState) => state.noteState
+  );
+
   const { handleLogout, authenticated } = useContext(Context);
-  const [notes, setNotes] = useState<Note[]>([] as Note[]);
   const [showModal, setShowModal] = useState(false);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
-      const response = await NotesService.getNotes();
-
-      setNotes(response.data);
-      setLoading(false);
-    })();
+    dispatch(getNotesRequest());
   }, []);
 
-  const createNote = useCallback(
-    (values: FormValueState, actions: FormikHelpers<FormValueState>) => {
-      (async () => {
-        const response = await NotesService.postNotes(values);
-        setNotes((prevState) => [...prevState, response.data]);
-
-        actions.setSubmitting(false);
-        setShowModal(false);
-      })();
-    },
-    [notes]
-  );
+  useEffect(() => {
+    isSuccessPostNote && setShowModal(false);
+  }, [isSuccessPostNote]);
 
   const deleteNote = useCallback((id: number) => {
     (async () => {
-      await NotesService.deleteNote({ id });
-
-      setNotes((prevState) => prevState.filter((note) => note.id !== id));
+      // await NotesService.deleteNote({ id });
+      // setNotes((prevState) => prevState.filter((note) => note.id !== id));
     })();
   }, []);
 
@@ -54,23 +44,19 @@ function Home() {
 
   return (
     <>
-      {loading && <Loading />}
+      {isLoadingGetNotes && <Loading />}
       {showModal && (
         <Modal
           title="Nova nota"
           handleClose={() => setShowModal(false)}
           style={{ width: "100px" }}
         >
-          <FormNote handleSubmit={createNote} />
+          <FormNote />
         </Modal>
       )}
       <Container>
         {notes.map((note) => (
-          <CardNote
-            key={note.id}
-            handleDelete={deleteNote}
-            note={note}
-          ></CardNote>
+          <CardNote key={note.id} note={note}></CardNote>
         ))}
         <FabButton position="left" handleClick={() => setShowModal(true)}>
           +
