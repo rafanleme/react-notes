@@ -1,74 +1,58 @@
-import { ErrorMessage, Field, Formik, FormikHelpers } from "formik";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  FormEventHandler,
+  useCallback,
+  useState,
+} from "react";
 import Button from "../../../components/Button";
 import Checkbox from "../../../components/Checkbox";
 import { Form } from "./styles";
-import * as Yup from "yup";
-import { PostNoteRequest } from "../../../store/ducks/notes/notes.types";
-import { useDispatch, useSelector } from "react-redux";
-import { postNoteRequest } from "../../../store/ducks/notes/notes.actions";
-import { ApplicationState } from "../../../store";
-import { useEffect, useRef } from "react";
 
-// interface FormNoteProps {
-//   handleSubmit: (
-//     payload: PostNoteRequest,
-//     actions: FormikHelpers<PostNoteRequest>
-//   ) => void;
-// }
+interface FormValueState {
+  text: string;
+  urgent: boolean;
+}
 
-function FormNote() {
-  const dispatch = useDispatch();
+interface FormNoteProps {
+  handleSubmit: (payload: FormValueState) => void;
+}
 
-  const { isSuccessPostNote } = useSelector(
-    (state: ApplicationState) => state.noteState
-  );
-
-  const formikRef = useRef(null) as any;
-
-  const initialValues: PostNoteRequest = {
+function FormNote({ handleSubmit }: FormNoteProps) {
+  const [formValues, setFormValues] = useState<FormValueState>({
     text: "",
     urgent: false,
-  };
+  });
 
-  const handleSubmit = (values: PostNoteRequest) => {
-    dispatch(postNoteRequest(values));
-  };
+  const handleChangeUrgent = useCallback(() => {
+    setFormValues((prevState) => ({ ...prevState, urgent: !prevState.urgent }));
+  }, [setFormValues]);
 
-  useEffect(() => {
-    !isSuccessPostNote &&
-      isSuccessPostNote !== undefined &&
-      formikRef?.current?.setSubmitting(false);
-  }, [isSuccessPostNote]);
+  const handleInput = (event: ChangeEvent<HTMLTextAreaElement>) =>
+    setFormValues({ ...formValues, text: event.target.value });
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSubmit(formValues);
+  };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      innerRef={formikRef}
-      validationSchema={Yup.object({
-        text: Yup.string()
-          .min(5, "Deve ter pelo menos 5 caracteres")
-          .required("Campo obrigatório"),
-      })}
-      onSubmit={handleSubmit}
-    >
-      {({ isSubmitting }) => {
-        return (
-          <Form>
-            <Field
-              as="textarea"
-              name="text"
-              autoFocus
-              placeholder="Insira o texto da nota"
-            />
-            <ErrorMessage name="text" />
-            <Checkbox name="urgent" label="Urgente?" />
-            <Button handleClick={() => {}} disabled={isSubmitting}>
-              {isSubmitting ? "Salvando..." : "Salvar"}
-            </Button>
-          </Form>
-        );
-      }}
-    </Formik>
+    <Form onSubmit={onSubmit}>
+      <textarea
+        value={formValues.text}
+        onChange={handleInput}
+        autoFocus
+        placeholder="Insira o texto da nota"
+      />
+      <Checkbox
+        checked={formValues.urgent}
+        handleChange={handleChangeUrgent}
+        label="Urgente?"
+      />
+      <Button type="submit" handleClick={() => {}}>
+        Salvar
+      </Button>
+    </Form>
   );
 }
 

@@ -12,15 +12,11 @@ export const ButtonStyled = styled.button`
   font-weight: bold;
   color: var(--white);
 
-  :disabled {
-    opacity: 0.5;
-  }
-
-  :hover:not:disabled {
+  :hover {
     box-shadow: 0px 4px 10px var(--bgPrimary);
   }
 
-  :active:not:disabled {
+  :active {
     transform: scale(0.95);
   }
 `;

@@ -1,20 +1,12 @@
-import { AuthProvider } from "./Context/AuthContext";
-import { GlobalStyles } from "./GlobalStyles";
-import AppRoutes from "./routes";
-import store from "./store";
-import { Provider } from "react-redux";
+import { GlobalStyles } from "./GlobalStyles"
+import Home from "./pages/Home"
+
 
 function App() {
+
   return (
-    <>
-      <GlobalStyles />
-      <Provider store={store}>
-        <AuthProvider>
-          <AppRoutes />
-        </AuthProvider>
-      </Provider>
-    </>
-  );
+    <><GlobalStyles /><Home/></>
+  )
 }
 
-export default App;
+export default App

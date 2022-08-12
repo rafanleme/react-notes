@@ -50,31 +50,9 @@ export const GlobalStyles = createGlobalStyle`
 
   }
 
-  input {
-    border: 0;
-    border-radius: 5px;
-    padding: 5px;
-
-    background-color: var(--bgPrimary);
-    font-size: 16px;
-    font-family: Montserrat;
-    color: var(--white);
-
-    ::placeholder{
-      color: var(--gray);
-    }
-
-  }
-
   input[type="checkbox"]{
     width: 20px;
     height: 20px;
-  }
-
-  span.input-error {
-    font-size: 12px;
-    margin-top: -5px;
-    color: var(--primary);
   }
 
 `;
