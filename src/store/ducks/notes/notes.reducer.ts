@@ -6,7 +6,7 @@ const initialState: NoteState = {
   newNote: null,
   isLoadingGetNotes: false,
   isSuccessPostNote: undefined,
-  isLoadingDeleteNote: true,
+  isLoadingDeleteNote: false,
   deleteNoteId: undefined,
 };
 

@@ -31,13 +31,6 @@ function Home() {
     isSuccessPostNote && setShowModal(false);
   }, [isSuccessPostNote]);
 
-  const deleteNote = useCallback((id: number) => {
-    (async () => {
-      // await NotesService.deleteNote({ id });
-      // setNotes((prevState) => prevState.filter((note) => note.id !== id));
-    })();
-  }, []);
-
   useEffect(() => {
     if (!authenticated) navigate("/");
   }, [authenticated]);
