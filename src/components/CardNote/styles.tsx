@@ -11,13 +11,10 @@ const fadeIn = keyframes`
   }
 `;
 
-const spin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+export const cardGradientBackground = `
+  background: var(--bgPrimary);
+  background: -webkit-linear-gradient(to top, var(--primary), var(--bgPrimary)); 
+  background: linear-gradient(to top, var(--primary), var(--bgPrimary)); 
 `;
 
 export const Container = styled.article`
@@ -27,16 +24,12 @@ export const Container = styled.article`
   position: relative;
 
   color: var(--white);
-  background-color: var(--primary);
+
+  ${cardGradientBackground}
+
   box-shadow: 2px 2px 10px #00000099;
 
   animation: ${fadeIn} ease-in 0.5s;
-
-  transition: opacity 0.2s;
-
-  .spin {
-    animation: ${spin}  0.9s linear infinite;
-  }
 
   p:first-child {
     font-size: 14px;
@@ -65,9 +58,5 @@ export const Container = styled.article`
     bottom: 5px;
     left: 5px;
     width: fit-content;
-  }
-
-  @media (max-width: 425px) {
-    width: 100%;
   }
 `;
