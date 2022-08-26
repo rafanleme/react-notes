@@ -80,7 +80,7 @@ function Home() {
       </Modal>
       <Navbar bg="light" expand="lg">
         <Container fluid>
-          <Navbar.Brand href="#home">Fiap-Notes</Navbar.Brand>
+          <Navbar.Brand href="#home">React-Notes</Navbar.Brand>
 
           <Button onClick={() => handleShow()}>Nova Nota</Button>
         </Container>
