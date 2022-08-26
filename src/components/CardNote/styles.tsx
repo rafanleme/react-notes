@@ -11,6 +11,12 @@ const fadeIn = keyframes`
   }
 `;
 
+export const cardGradientBackground = `
+  background: var(--bgPrimary);
+  background: -webkit-linear-gradient(to top, var(--primary), var(--bgPrimary)); 
+  background: linear-gradient(to top, var(--primary), var(--bgPrimary)); 
+`;
+
 export const Container = styled.article`
   width: 200px;
   height: 200px;
@@ -18,10 +24,12 @@ export const Container = styled.article`
   position: relative;
 
   color: var(--white);
-  background-color: var(--primary);
+
+  ${cardGradientBackground}
+
   box-shadow: 2px 2px 10px #00000099;
 
-  animation: ${fadeIn} ease-in .5s;
+  animation: ${fadeIn} ease-in 0.5s;
 
   p:first-child {
     font-size: 14px;
@@ -39,7 +47,7 @@ export const Container = styled.article`
     transition: 0.3s;
   }
 
-  .material-icons:not(#priority):hover  {
+  .material-icons:not(#priority):hover {
     color: #333;
     transform: scale(1.1);
     transform: rotate(360deg);
