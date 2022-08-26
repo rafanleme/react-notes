@@ -23,7 +23,7 @@ export const FabButtonStyled = styled.button`
   :hover {
     font-weight: normal;
     color: var(--white);
-    background-color: #ed145b;
+    background-color: var(--primary);
     box-shadow: 2px 10px 10px #0009;
     transform: scale(2) translateX(5px) translateY(5px);
   }
