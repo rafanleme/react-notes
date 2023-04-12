@@ -1,5 +1,4 @@
 import styled, { keyframes } from "styled-components";
-import { cardGradientBackground } from "../CardNote/styles";
 
 const fadeIn = keyframes`
   from {
@@ -31,7 +30,7 @@ export const Overlay = styled.div`
 
   background-color: #0009;
 
-  animation: ${fadeIn} 0.2s;
+  animation: ${fadeIn} .2s;
 
   display: flex;
   justify-content: center;
@@ -48,9 +47,9 @@ export const ModalContainer = styled.section`
 
   overflow-y: auto;
 
-  animation: ${showInCard} 0.4s;
+  animation: ${showInCard} .4s;
 
-  ${cardGradientBackground}
+  background-color: var(--primary);
   box-shadow: 0px 0px 10px black;
   border-radius: 4px;
 
