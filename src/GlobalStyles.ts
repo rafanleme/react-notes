@@ -3,7 +3,7 @@ import styled, { createGlobalStyle } from "styled-components";
 export const GlobalStyles = createGlobalStyle`
 
   :root {
-    --primary:  #ed145b;
+    --primary:  #dd1818;
     --white: #EEEEEE;
     --gray: #CCC;
     --bgPrimary: #00000099;

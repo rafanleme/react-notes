@@ -5,5 +5,5 @@ import { Note } from "./types";
 export const NotesService = {
   getNotes: () => api.get<Note[]>("/notes"),
   postNotes: (payload: FormValueState) => api.post<Note>("/notes", payload),
-  deleteNote: (id: number) => api.delete(`/notes/${id}`),
+  deleteNote: (payload: { id: number }) => api.delete(`/notes/${payload.id}`),
 };

@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { Note } from "../../services/notes/types";
 import { formatDate } from "../../services/utils";
 import { Container } from "./styles";
@@ -9,9 +8,6 @@ interface NoteProps {
 }
 
 function CardNote({ note, handleDelete }: NoteProps) {
-
-  const navigate = useNavigate();
-
   return (
     <>
       <Container>
@@ -22,10 +18,6 @@ function CardNote({ note, handleDelete }: NoteProps) {
             priority_high
           </span>
         )}
-        <span className="material-icons" id="priority" onClick={() => navigate("/details")}>
-          {" "}
-          info{" "}
-        </span>
         <span className="material-icons" onClick={() => handleDelete(note.id)}>
           {" "}
           delete_forever{" "}
