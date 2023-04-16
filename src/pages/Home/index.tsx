@@ -4,7 +4,6 @@ import FabButton from "../../components/FabButton";
 import FormNote, { FormValueState } from "./FormNote";
 import Modal from "../../components/Modal";
 import { NotesService } from "../../services/notes/note-service";
-import { Note } from "../../services/notes/types";
 import { Container } from "./styles";
 import { Context } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -15,8 +14,6 @@ import { formatDate } from "../../services/utils";
 function Home() {
   const { handleLogout, authenticated } = useContext(Context);
   const [showModal, setShowModal] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
   const { data, isLoading, isError, dataUpdatedAt } = useQuery("notes", NotesService.getNotes, {
