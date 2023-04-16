@@ -15,6 +15,8 @@ import { formatDate } from "../../services/utils";
 function Home() {
   const { handleLogout, authenticated } = useContext(Context);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
   const { data, isLoading, isError, dataUpdatedAt } = useQuery("notes", NotesService.getNotes, {
@@ -42,7 +44,7 @@ function Home() {
     },
   });
 
-  if(isError){
+  if(isError){ 
     return (
       <Container>
         <h1 style={{color: "pink"}}>Erro ao carregar notas</h1>
