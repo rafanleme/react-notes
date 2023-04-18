@@ -29,7 +29,7 @@ export const Form = styled.form`
   }
 
   a {
-    color: var(--white);
+    color: var(--black);
     align-self: center;
 
     :hover{

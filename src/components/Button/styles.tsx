@@ -7,10 +7,10 @@ export const ButtonStyled = styled.button`
   background-color: transparent;
   cursor: pointer;
   transition: 0.2s;
-  border: 1px solid var(--white);
+  border: 1px solid var(--black);
   border-radius: 5px;
   font-weight: bold;
-  color: var(--white);
+  color: var(--black);
 
   :hover {
     box-shadow: 0px 4px 10px var(--bgPrimary);

@@ -3,9 +3,9 @@ import styled, { createGlobalStyle } from "styled-components";
 export const GlobalStyles = createGlobalStyle`
 
   :root {
-    --primary:  #dd1818;
+    --primary:  #FFC52F;
     --white: #EEEEEE;
-    --gray: #CCC;
+    --gray: #999;
     --bgPrimary: #00000099;
     --overlayLight: #00000033;
     --whiteTransparent: #FFFC;
@@ -28,7 +28,7 @@ export const GlobalStyles = createGlobalStyle`
     font-family: Montserrat;
 
     background-color: var(--bgPrimary);
-    color: var(--white);
+    color: var(--black);
 
     overflow-x: hidden;
   }
@@ -42,7 +42,7 @@ export const GlobalStyles = createGlobalStyle`
     background-color: transparent;
     font-size: 16px;
     font-family: Montserrat;
-    color: var(--white);
+    color: var(--black);
 
     ::placeholder{
       color: var(--gray);
@@ -58,7 +58,7 @@ export const GlobalStyles = createGlobalStyle`
     background-color: var(--bgPrimary);
     font-size: 16px;
     font-family: Montserrat;
-    color: var(--white);
+    color: var(--black);
 
     ::placeholder{
       color: var(--gray);
