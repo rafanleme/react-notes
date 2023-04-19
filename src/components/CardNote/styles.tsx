@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 
 const fadeIn = keyframes`
   from {
-    transform: scale(0.2) rotate(180deg);
+    transform: scale(0.2) rotate(90deg);
     opacity: 0;
   }
   to {
@@ -21,7 +21,7 @@ export const Container = styled.article`
   background-color: var(--primary);
   box-shadow: 2px 2px 10px #00000099;
 
-  animation: ${fadeIn} ease-in .5s;
+  animation: ${fadeIn} ease-in .3s;
 
   p:first-child {
     font-size: 14px;

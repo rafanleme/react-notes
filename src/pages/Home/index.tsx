@@ -1,49 +1,35 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import CardNote from "../../components/CardNote";
 import FabButton from "../../components/FabButton";
-import FormNote, { FormValueState } from "./FormNote";
+import FormNote from "./FormNote";
 import Modal from "../../components/Modal";
 import { NotesService } from "../../services/notes/note-service";
 import { Button, Container } from "./styles";
 import { Context } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { formatDate } from "../../services/utils";
 
 function Home() {
+  const navigate = useNavigate();
   const { handleLogout, authenticated } = useContext(Context);
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-
-  const { data, isLoading, isError, dataUpdatedAt } = useQuery({
-    queryKey:["notes", page, pageSize],
-    queryFn: () => NotesService.getNotesPaginated(page, pageSize),
-    keepPreviousData: true
-  });
+  const [pageSize] = useState(5);
 
   useEffect(() => {
     if (!authenticated) navigate("/");
   }, [authenticated]);
 
-  const deleteNote = useCallback((id: number) => {
-    // (async () => {
-    //   await NotesService.deleteNote(id);
+  const deleteNote = useCallback((id: number) => { }, []);
 
-    //   setNotes((prevState) => prevState.filter((note) => note.id !== id));
-    // })();
-  }, []);
 
-  const queryClient = useQueryClient()
-
-  const mutationCreate = useMutation(NotesService.postNotes, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("notes");
-      setShowModal(false);
-    },
+  const { data, isLoading, isError, dataUpdatedAt, isPreviousData } = useQuery({
+    queryKey: ["notes", page, pageSize],
+    queryFn: () => NotesService.getNotesPaginated(page, pageSize),
+    // keepPreviousData: true
   });
 
   if (isError) {
@@ -56,14 +42,14 @@ function Home() {
 
   return (
     <>
-      {isLoading && <Loading />}
+      {isLoading  && <Loading />}
       {showModal && (
         <Modal
           title="Nova nota"
           handleClose={() => setShowModal(false)}
           style={{ width: "100px" }}
         >
-          <FormNote handleSubmit={mutationCreate.mutate} />
+          <FormNote handleSubmit={() => {}} />
         </Modal>
       )}
       <Container>

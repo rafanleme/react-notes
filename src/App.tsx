@@ -6,8 +6,6 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 
 
 function App() {
-  console.log(import.meta.env.MODE);
-
   const queryClient = new QueryClient();
 
   return (
