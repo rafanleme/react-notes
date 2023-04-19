@@ -17,7 +17,7 @@ export const Form = styled.form`
   padding: 20px;
   
   border-radius: 10px;
-  background-color: var(--bgPrimary);
+  background-color: var(--primnary);
   box-shadow: 0px 4px 10px var(--bgPrimary),
               0px 10px 40px var(--bgPrimary);
 

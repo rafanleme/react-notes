@@ -9,17 +9,20 @@ function App() {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        refetchInterval: 60 * 1000,
-        refetchOnWindowFocus: false,
+        refetchInterval: 5 * 1000,
       }
     }
   });
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <AppRoutes />
-      </QueryClientProvider>
+      <GlobalStyles />
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AppRoutes />
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      </AuthProvider>
     </>
   );
 }

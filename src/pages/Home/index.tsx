@@ -1,19 +1,25 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import CardNote from "../../components/CardNote";
 import FabButton from "../../components/FabButton";
-import FormNote, { FormValueState } from "./FormNote";
+import FormNote from "./FormNote";
 import Modal from "../../components/Modal";
-import { NotesService, PaginatedNotes } from "../../services/notes/note-service";
-import { Button, Container } from "./styles";
-import { Context } from "../../Context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { NotesService } from "../../services/notes/note-service";
+import { Container } from "./styles";
 import Loading from "../../components/Loading";
-import { Note } from "../../services/notes/types";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 function Home() {
-  const { data: notes, isLoading, isError }
-    = useQuery("notes", NotesService.getNotes);
+  const [showModal, setShowModal] = useState(false);
+
+  const { data: notes, isLoading, isError } = useQuery(
+    "notes",
+    NotesService.getNotes,
+    {
+      refetchOnWindowFocus: false
+    }
+  );
+
+  const queryClient = useQueryClient();
 
   if (isError) {
     return (
@@ -21,12 +27,44 @@ function Home() {
     );
   }
 
+  const mutationCreate = useMutation(NotesService.postNotes, {
+    onMutate: (newNote) => {
+      queryClient.cancelQueries('notes');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries("notes");
+      setShowModal(false);
+    },
+    onError: (_, __, context: any) => {
+      if (context?.previousComments) {
+        queryClient.setQueryData('notes', context.previousComments);
+      }
+    },
+    onSettled: () => {
+      // success or error
+    }
+  });
+
   return (
     <>
       {isLoading && <Loading />}
-      {notes?.map((note) => (
-        <CardNote key={note.id} note={note}></CardNote>
-      ))}
+      {showModal && (
+        <Modal
+          title="Nova nota"
+          handleClose={() => setShowModal(false)}
+          style={{ width: "100px" }}
+        >
+          <FormNote handleSubmit={mutationCreate.mutate} />
+        </Modal>
+      )}
+      <Container>
+        {notes?.map((note) => (
+          <CardNote key={note.id} note={note}></CardNote>
+        ))}
+      </Container>
+      <FabButton position="left" handleClick={() => setShowModal(true)}>
+        +
+      </FabButton>
     </>
   );
 }
