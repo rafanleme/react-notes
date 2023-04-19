@@ -3,27 +3,37 @@ import CardNote from "../../components/CardNote";
 import FabButton from "../../components/FabButton";
 import FormNote, { FormValueState } from "./FormNote";
 import Modal from "../../components/Modal";
-import { NotesService } from "../../services/notes/note-service";
+import { NotesService, PaginatedNotes } from "../../services/notes/note-service";
 import { Button, Container } from "./styles";
 import { Context } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
-import { useQuery, useMutation, useQueryClient } from "react-query";
-import { formatDate } from "../../services/utils";
+
+const initialData: Partial<PaginatedNotes> = {
+  notes: []
+}
 
 function Home() {
   const { handleLogout, authenticated } = useContext(Context);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
+  const [data, setData] = useState<Partial<PaginatedNotes>>(initialData);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
 
-  const { data, isLoading, isError, dataUpdatedAt } = useQuery({
-    queryKey:["notes", page, pageSize],
-    queryFn: () => NotesService.getNotesPaginated(page, pageSize),
-    keepPreviousData: true
-  });
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      const { data } = await NotesService.getNotesPaginated(page, pageSize);
+
+      setData(data);
+      setIsLoading(false);
+    })();
+  }, [page, pageSize]);
+
 
   useEffect(() => {
     if (!authenticated) navigate("/");
@@ -37,14 +47,14 @@ function Home() {
     // })();
   }, []);
 
-  const queryClient = useQueryClient()
+  // const queryClient = useQueryClient()
 
-  const mutationCreate = useMutation(NotesService.postNotes, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("notes");
-      setShowModal(false);
-    },
-  });
+  // const mutationCreate = useMutation(NotesService.postNotes, {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries("notes");
+  //     setShowModal(false);
+  //   },
+  // });
 
   if (isError) {
     return (
@@ -63,17 +73,17 @@ function Home() {
           handleClose={() => setShowModal(false)}
           style={{ width: "100px" }}
         >
-          <FormNote handleSubmit={mutationCreate.mutate} />
+          {/* <FormNote handleSubmit={mutationCreate.mutate} /> */}
         </Modal>
       )}
       <Container>
         <Button onClick={() => setPage(page - 1)} disabled={page === 1}>{"<"}</Button>
         <div style={{ width: 1000, display: "flex", gap: 16 }}>
-          {data?.data.notes.map((note) => (
+          {data?.notes?.map((note) => (
             <CardNote key={note.id} handleDelete={deleteNote} note={note}></CardNote>
           ))}
         </div>
-        <Button onClick={() => setPage(page + 1)} disabled={page === data?.data.totalPages}>{">"}</Button>
+        <Button onClick={() => setPage(page + 1)} disabled={page === data?.totalPages}>{">"}</Button>
         <FabButton position="left" handleClick={() => setShowModal(true)}>
           +
         </FabButton>
@@ -81,7 +91,6 @@ function Home() {
           <span className="material-icons">logout</span>
         </FabButton>
       </Container>
-      {formatDate(new Date(dataUpdatedAt))}
     </>
   );
 }

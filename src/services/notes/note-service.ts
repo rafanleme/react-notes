@@ -2,7 +2,7 @@ import { FormValueState } from "../../pages/Home/FormNote";
 import { api } from "../api";
 import { Note } from "./types";
 
-interface PaginatedNotes {
+export interface PaginatedNotes {
   currentPage: number;
   totalItems: number;
   totalPages: number;
