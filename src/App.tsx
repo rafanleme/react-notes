@@ -6,20 +6,22 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 
 
 function App() {
-  console.log(import.meta.env.MODE);
-
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchInterval: 60 * 1000,
+        refetchOnWindowFocus: false,
+      }
+    }
+  });
 
   return (
     <>
-      <GlobalStyles />
-      <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-          <AppRoutes />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AppRoutes />
+      </QueryClientProvider>
     </>
   );
 }
+
 export default App;

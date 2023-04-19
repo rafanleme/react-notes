@@ -4,10 +4,10 @@ import { Container } from "./styles";
 
 interface NoteProps {
   note: Note;
-  handleDelete: (id: number) => void;
+  handleDelete?: (id: number) => void;
 }
 
-function CardNote({ note, handleDelete }: NoteProps) {
+function CardNote({ note, handleDelete = () => {} }: NoteProps) {
   return (
     <>
       <Container>

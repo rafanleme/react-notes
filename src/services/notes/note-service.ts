@@ -10,7 +10,7 @@ export interface PaginatedNotes {
 }
 
 export const NotesService = {
-  getNotes: () => api.get<Note[]>("/notes"),
+  getNotes: () => api.get<Note[]>("/notes").then(response => (response.data)),
   getNotesPaginated: (page: number, pageSize: number) => api.get<PaginatedNotes>("/notes:paginated", {
     params: {
       page,
